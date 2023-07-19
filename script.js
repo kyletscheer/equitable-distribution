@@ -20,7 +20,6 @@ function calculateDistribution() {
   );
   if (sliderSet) {
     fairnessAdjustment = parseFloat(sliderValue);
-    console.log("sliderSet? Yes");
   }
 
   var estateAmount = document.getElementById("estateAmount").value;
