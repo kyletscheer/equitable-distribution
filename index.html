@@ -1,8 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" data-bs-theme="light">
-
-<head>
-    <!-- Google tag (gtag.js) -->
+<html lang="en">
+  <head>
+       <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-MLW82EVC8P"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -11,109 +10,1337 @@
 
   gtag('config', 'G-MLW82EVC8P');
 </script>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Equitable Distribution Calculator</title>
-  <!-- Bootstrap CSS -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css" rel="stylesheet">
-  <!-- Bootstrap Icons -->
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css"
-    rel="stylesheet">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Equitable Distribution Calculator</title>
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.11.1/font/bootstrap-icons.min.css"
+      rel="stylesheet"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js"></script>
+    <script
+      id="MathJax-script"
+      async
+      src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"
+    ></script>
+    <style>
+      :root {
+        --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        --success-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+        --info-gradient: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        --card-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+        --card-shadow-hover: 0 15px 50px rgba(0, 0, 0, 0.15);
+      }
+      * {
+        transition: background-color 0.3s ease, color 0.3s ease,
+          border-color 0.3s ease;
+      }
 
-  <link href="style.css" rel="stylesheet">
-  <style>
-    #fullOutput {
-      display: none;
-    }
-    #myChart {
-      width: 100%;
-      max-width: 600px;
-    }
-    .form-control {
-      width: 300px;
-    }
-    .content {
-      padding-top: 100px;
-      padding-bottom: 100px;
-    }
-  </style>
-</head>
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          sans-serif;
+        background: var(--bs-body-bg);
+        color: var(--bs-body-color);
+        min-height: 100vh;
+      }
 
-<body>
-  <!-- Navigation -->
-  <nav class="navbar navbar-expand-lg navbar-light bg-white border-bottom">
-    <div class="container">
-      <a class="navbar-brand fw-bold" href="index.html">Equitable Distribution Calculator</a>
-      <div class="navbar-actions">
-        <div class="theme-toggle" id="themeToggle" role="button" aria-label="Toggle theme">
-          <i class="bi bi-sun-fill"></i>
+      .navbar {
+        backdrop-filter: blur(10px);
+        background: rgba(255, 255, 255, 0.95) !important;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+        padding: 1rem 0;
+      }
+
+      .hero-section {
+        background: var(--primary-gradient);
+        color: white;
+        padding: 3rem 0;
+        border-radius: 0 0 2rem 2rem;
+        margin-bottom: 2rem;
+        box-shadow: var(--card-shadow);
+      }
+
+      .card {
+        border: none;
+        border-radius: 1rem;
+        box-shadow: var(--card-shadow);
+        background: var(--bs-card-bg, white);
+        transition: all 0.3s ease;
+        height: 100%;
+      }
+
+      .card:hover {
+        box-shadow: var(--card-shadow-hover);
+        transform: translateY(-5px);
+      }
+
+      .preset-btn {
+        padding: 0.75rem 1.5rem;
+        border-radius: 2rem;
+        border: 2px solid transparent;
+        background: linear-gradient(white, white) padding-box,
+          var(--primary-gradient) border-box;
+        transition: all 0.3s ease;
+        font-weight: 600;
+      }
+
+      .preset-btn:hover,
+      .preset-btn.active {
+        background: var(--primary-gradient);
+        color: white;
+        transform: scale(1.05);
+      }
+
+      .person-card {
+        background: linear-gradient(
+          135deg,
+          rgba(102, 126, 234, 0.1) 0%,
+          rgba(118, 75, 162, 0.1) 100%
+        );
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+        position: relative;
+        border: 2px solid transparent;
+        transition: all 0.3s ease;
+      }
+
+      .person-card:hover {
+        border-color: #667eea;
+        transform: translateX(5px);
+      }
+
+      .remove-person {
+        position: absolute;
+        top: 0.5rem;
+        right: 0.5rem;
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background: rgba(245, 87, 108, 0.2);
+        border: none;
+        color: #f5576c;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+      }
+
+      .remove-person:hover {
+        background: #f5576c;
+        color: white;
+        transform: scale(1.1);
+      }
+
+      .allocation-result {
+        background: var(--info-gradient);
+        color: white;
+        padding: 1.5rem;
+        border-radius: 1rem;
+        text-align: center;
+        margin-top: 1rem;
+        animation: fadeIn 0.5s ease;
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+          transform: translateY(10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      .allocation-result h3 {
+        font-size: 2rem;
+        font-weight: 700;
+        margin: 0;
+      }
+
+      .allocation-result p {
+        margin: 0.5rem 0 0;
+        opacity: 0.9;
+      }
+
+      .form-control,
+      .form-select {
+        border-radius: 0.5rem;
+        border: 2px solid #e9ecef;
+        padding: 0.75rem 1rem;
+        transition: all 0.3s ease;
+      }
+
+      .form-control:focus,
+      .form-select:focus {
+        border-color: #667eea;
+        box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+      }
+
+      .range-slider {
+        width: 100%;
+        height: 8px;
+        border-radius: 5px;
+        background: linear-gradient(to right, #4facfe, #667eea, #764ba2);
+        outline: none;
+ /*       -webkit-appearance: none;*/
+      }
+
+      .range-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        appearance: none;
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        border: 3px solid #667eea;
+      }
+
+      .range-slider::-moz-range-thumb {
+        width: 24px;
+        height: 24px;
+        border-radius: 50%;
+        background: white;
+        cursor: pointer;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        border: 3px solid #667eea;
+      }
+
+      .btn-gradient {
+        background: var(--primary-gradient);
+        border: none;
+        color: white;
+        padding: 0.75rem 2rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+      }
+
+      .btn-gradient:hover {
+        transform: scale(1.05);
+        box-shadow: 0 5px 20px rgba(102, 126, 234, 0.4);
+        color: white;
+      }
+
+      .chart-container {
+        position: relative;
+        height: 350px;
+        margin: 2rem auto;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .chart-container canvas {
+        max-width: 100%;
+        height: auto;
+      }
+
+      .comparison-card {
+        border: 2px solid #e9ecef;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        margin-bottom: 1rem;
+      }
+
+      .badge-custom {
+        padding: 0.5rem 1rem;
+        border-radius: 2rem;
+        font-weight: 600;
+        font-size: 0.875rem;
+      }
+
+      .collapse-section {
+        background: rgba(102, 126, 234, 0.05);
+        border-radius: 1rem;
+        padding: 0;
+        margin: 2rem 0;
+        overflow: hidden;
+      }
+
+      .collapse-header {
+        padding: 1.5rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        transition: all 0.3s ease;
+      }
+
+      .collapse-header:hover {
+        background: rgba(102, 126, 234, 0.1);
+      }
+
+      .collapse-header i {
+        transition: transform 0.3s ease;
+      }
+
+      .collapse-header[aria-expanded="true"] i {
+        transform: rotate(180deg);
+      }
+
+      .tab-custom {
+        border: none;
+        background: none;
+        padding: 1rem 2rem;
+        font-weight: 600;
+        color: #6c757d;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+
+      .tab-custom:hover {
+        color: #667eea;
+      }
+
+      .tab-custom.active {
+        color: #667eea;
+      }
+
+      .tab-custom.active::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background: var(--primary-gradient);
+        border-radius: 3px 3px 0 0;
+      }
+
+      .export-menu {
+        display: none;
+        position: absolute;
+        background: white;
+        border-radius: 0.5rem;
+        box-shadow: var(--card-shadow);
+        padding: 0.5rem;
+        z-index: 1000;
+        min-width: 150px;
+      }
+
+      .export-menu.show {
+        display: block;
+      }
+
+      .export-item {
+        padding: 0.5rem 1rem;
+        cursor: pointer;
+        border-radius: 0.25rem;
+        transition: all 0.2s ease;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+      }
+
+      .export-item:hover {
+        background: rgba(102, 126, 234, 0.1);
+      }
+
+      @media (max-width: 768px) {
+        .hero-section {
+          padding: 2rem 0;
+        }
+
+        .chart-container {
+          height: 250px;
+        }
+
+        .preset-btn {
+          padding: 0.5rem 1rem;
+          font-size: 0.875rem;
+        }
+      }
+
+      .loading-spinner {
+        display: inline-block;
+        width: 20px;
+        height: 20px;
+        border: 3px solid rgba(255, 255, 255, 0.3);
+        border-radius: 50%;
+        border-top-color: white;
+        animation: spin 1s ease-in-out infinite;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
+        }
+      }
+
+      .tooltip-custom {
+        position: relative;
+        display: inline-block;
+      }
+
+      .tooltip-custom .tooltip-text {
+        visibility: hidden;
+        background-color: #333;
+        color: white;
+        text-align: center;
+        border-radius: 0.5rem;
+        padding: 0.5rem 1rem;
+        position: absolute;
+        z-index: 1;
+        bottom: 125%;
+        left: 50%;
+        transform: translateX(-50%);
+        opacity: 0;
+        transition: opacity 0.3s;
+        white-space: nowrap;
+        font-size: 0.875rem;
+      }
+
+      .tooltip-custom:hover .tooltip-text {
+        visibility: visible;
+        opacity: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Navigation -->
+    <nav class="navbar navbar-expand-lg sticky-top">
+      <div class="container">
+        <a class="navbar-brand fw-bold" href="#">
+          <i class="bi bi-calculator"></i> Equitable Distribution
+        </a>
+        <div class="d-flex align-items-center gap-3">
+          
+          <button
+            class="navbar-toggler border-0"
+            type="button"
+            data-bs-toggle="collapse"
+            data-bs-target="#navbarContent"
+          >
+            <span class="navbar-toggler-icon"></span>
+          </button>
         </div>
-        <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
-        </button>
+        <div class="collapse navbar-collapse" id="navbarContent">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a class="nav-link" href="#calculator">Calculator</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#how-it-works">How It Works</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#about">About</a>
+            </li>
+          </ul>
+        </div>
       </div>
-      <div class="collapse navbar-collapse" id="navbarContent">
-        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-          <li class="nav-item">
-            <a class="nav-link" href="about.html">About</a>
-          </li>
-        </ul>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="hero-section">
+      <div class="container text-center">
+        <h1 class="display-4 fw-bold mb-3">
+          Equitable Distribution Calculator
+        </h1>
+        <p class="lead mb-0">
+          Distribute resources fairly based on income levels and needs
+        </p>
+        <p class="mt-2 opacity-75">
+          A mathematical approach to equitable allocation
+        </p>
       </div>
     </div>
-  </nav>
 
-  <!-- Main Content -->
-  <main class="py-5">
-    <div class="container">
-      <h1 class="mb-4">Estate Distribution Calculator</h1>
-      <form id="distributionForm" onsubmit="event.preventDefault(); calculateDistribution();">
-        <div class="form-group">
-          <label for="estateAmount">Total Estate Amount:</label>
-          <input type="number" class="form-control" id="estateAmount" placeholder="Ex: 1000000" required />
-        </div>
+    <!-- Main Content -->
+    <div class="container mb-5" id="calculator">
+      <!-- Tabs -->
+      <ul
+        class="nav nav-tabs border-0 mb-4 justify-content-center"
+        role="tablist"
+      >
+        <li class="nav-item" role="presentation">
+          <button
+            class="tab-custom active"
+            data-bs-toggle="tab"
+            data-bs-target="#basic-tab"
+            type="button"
+          >
+            <i class="bi bi-calculator"></i> Basic Calculator
+          </button>
+        </li>
+        <li class="nav-item" role="presentation">
+          <button
+            class="tab-custom"
+            data-bs-toggle="tab"
+            data-bs-target="#comparison-tab"
+            type="button"
+          >
+            <i class="bi bi-bar-chart"></i> Scenario Comparison
+          </button>
+        </li>
+      </ul>
 
-        <div class="form-group">
-          <label for="fairnessAdjustment">Fairness Adjustment:</label>
-          <input type="number" class="form-control" id="fairnessAdjustment" step="0.01" min="0" max="200" placeholder="Ex: 1" required />
-        </div>
+      <div class="tab-content">
+        <!-- Basic Calculator Tab -->
+        <div class="tab-pane fade show active" id="basic-tab">
+          <div class="row g-4">
+            <!-- Input Section -->
+            <div class="col-lg-5">
+              <div class="card">
+                <div class="card-body">
+                  <h4 class="card-title mb-4">
+                    <i class="bi bi-wallet2"></i> Setup Distribution
+                  </h4>
 
-        <div class="form-group">
-          <label for="incomes">Individual Incomes (comma-separated):</label>
-          <input type="text" class="form-control" id="incomes" placeholder="Ex: 0,10000,25000,100000,1000000" required />
-        </div>
-
-        <button type="submit" class="btn btn-primary">Calculate</button>
-      </form>
-      <div id="fullOutput">
-        <h2 class="mt-4">Individual Distributions:</h2>
-        <div id="output"></div>
-        <canvas id="myChart"></canvas>
-        <div id="slider_div">
-          <label for="fairnessAdjustmentSlider">Fairness Adjustment Slider:</label>
-          <input type="range" class="form-control-range" id="fairnessAdjustmentSlider" min="0" max="200" step=".01" value="0" style="width: 100%" />
-          <span id="sliderValueDisplay">0.00</span><br /><br />
-        </div>
-      </div>
-    </div>
-  </main>
-
-        <!-- Footer -->
-        <footer class="bg-white border-top py-4 mt-auto">
-          <div class="container">
-              <div class="d-flex justify-content-between align-items-center">
-                  <div>
-                      Made by <a href="https://www.kylescheer.com" target="_blank">Kyle Scheer</a>
+                  <!-- Estate Amount -->
+                  <div class="mb-4">
+                    <label class="form-label fw-bold"
+                      >Total Amount to Distribute</label
+                    >
+                    <div class="input-group">
+                      <span class="input-group-text">$</span>
+                      <input
+                        type="number"
+                        class="form-control"
+                        id="estateAmount"
+                        placeholder="1,000,000"
+                        value="1000000"
+                        min="0"
+                      />
+                    </div>
                   </div>
-                  <a href="https://github.com/kyletscheer/equitable-distribution" target="_blank">View Code</a>
+
+                  <!-- Fairness Presets -->
+                  <div class="mb-4">
+                    <label
+                      class="form-label fw-bold d-flex align-items-center gap-2"
+                    >
+                      Fairness Level
+                      <span class="tooltip-custom">
+                        <i class="bi bi-info-circle text-muted"></i>
+                        <span class="tooltip-text"
+                          >How much should income differences affect
+                          distribution?</span
+                        >
+                      </span>
+                    </label>
+                    <div class="d-flex flex-wrap gap-2 mb-3">
+                      <button class="preset-btn active" data-value="0">
+                        Equal
+                      </button>
+                      <button class="preset-btn" data-value="1">
+                        Moderate
+                      </button>
+                      <button class="preset-btn" data-value="2">Strong</button>
+                      <button class="preset-btn" data-value="5">
+                        Very Strong
+                      </button>
+                    </div>
+                    <input
+                      type="range"
+                      class="range-slider"
+                      id="fairnessSlider"
+                      min="0"
+                      max="200"
+                      step="1"
+                      value="0"
+                    />
+                    <div class="d-flex justify-content-between mt-2">
+                      <small class="text-muted"
+                        >Adjustment: <span id="fairnessValue">0.00</span></small
+                      >
+                      <small class="text-muted">Custom</small>
+                    </div>
+                  </div>
+
+                  <!-- People Section -->
+                  <div class="mb-3">
+                    <label class="form-label fw-bold">People & Incomes</label>
+                  </div>
+                  <div id="peopleContainer"></div>
+                  <button
+                    class="btn btn-outline-primary w-100"
+                    id="addPersonBtn"
+                  >
+                    <i class="bi bi-plus-circle"></i> Add Person
+                  </button>
+                </div>
               </div>
+            </div>
+
+            <!-- Results Section -->
+            <div class="col-lg-7">
+              <div class="card">
+                <div class="card-body">
+                  <div
+                    class="d-flex justify-content-between align-items-center mb-4"
+                  >
+                    <h4 class="card-title mb-0">
+                      <i class="bi bi-pie-chart"></i> Distribution Results
+                    </h4>
+                    <div class="position-relative">
+                      <button
+                        class="btn btn-sm btn-outline-secondary"
+                        id="exportBtn"
+                      >
+                        <i class="bi bi-download"></i> Export
+                      </button>
+                      <div class="export-menu" id="exportMenu">
+                        <div class="export-item" data-format="csv">
+                          <i class="bi bi-file-earmark-spreadsheet"></i> CSV
+                        </div>
+                        <div class="export-item" data-format="json">
+                          <i class="bi bi-file-earmark-code"></i> JSON
+                        </div>
+                        <div class="export-item" data-format="share">
+                          <i class="bi bi-share"></i> Share Link
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div id="resultsContainer">
+                    <div class="text-center text-muted py-5">
+                      <i class="bi bi-calculator display-1 opacity-25"></i>
+                      <p class="mt-3">
+                        Add people and incomes to see distribution
+                      </p>
+                    </div>
+                  </div>
+
+                  <!-- Charts -->
+                  <div class="chart-container">
+                    <canvas id="pieChart"></canvas>
+                  </div>
+                  <div class="chart-container">
+                    <canvas id="barChart"></canvas>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
-      </footer>
+        </div>
 
-  <!-- Bootstrap Bundle with Popper -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
-  <script src="darkmode.js"></script>
-  <script src="script.js"></script>
-</body>
+        <!-- Scenario Comparison Tab -->
+        <div class="tab-pane fade" id="comparison-tab">
+          <div class="card">
+            <div class="card-body">
+              <h4 class="card-title mb-4">
+                <i class="bi bi-bar-chart"></i> Compare Different Fairness
+                Levels
+              </h4>
+              <p class="text-muted">
+                See how different fairness adjustments affect the distribution
+              </p>
 
+              <div id="comparisonContainer">
+                <div class="row g-3" id="comparisonResults"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- How It Works Section -->
+    <div class="container mb-5" id="how-it-works">
+      <div class="collapse-section">
+        <div
+          class="collapse-header"
+          data-bs-toggle="collapse"
+          data-bs-target="#mathCollapse"
+          aria-expanded="false"
+        >
+          <h3 class="mb-0">
+            <i class="bi bi-book"></i> How It Works: The Mathematics
+          </h3>
+          <i class="bi bi-chevron-down"></i>
+        </div>
+        <div class="collapse" id="mathCollapse">
+          <div class="p-4">
+            <div class="row g-4">
+              <div class="col-md-6">
+                <h5>The Core Principle</h5>
+                <p>The formula distributes resources by:</p>
+                <ol>
+                  <li>
+                    Calculating each person's income as a fraction of total
+                    income
+                  </li>
+                  <li>
+                    Inverting this fraction (so lower incomes = higher value)
+                  </li>
+                  <li>Applying a fairness adjustment exponent</li>
+                  <li>Normalizing so total equals the distribution amount</li>
+                </ol>
+              </div>
+              <div class="col-md-6">
+                <h5>Fairness Adjustment Scale</h5>
+                <ul>
+                  <li><strong>0:</strong> Everyone gets equal amounts</li>
+                  <li>
+                    <strong>1-2:</strong> Moderate redistribution to lower
+                    earners
+                  </li>
+                  <li>
+                    <strong>3-10:</strong> Strong preference for lower earners
+                  </li>
+                  <li>
+                    <strong>10+:</strong> Extreme concentration to lowest
+                    earners
+                  </li>
+                </ul>
+              </div>
+            </div>
+
+            <div class="mt-4">
+              <h5>The Formula</h5>
+              <div class="bg-light p-4 rounded" style="overflow-x: auto">
+                <p class="mb-3"><strong>For each person \(i\):</strong></p>
+                <p style="text-align: center; font-size: 1.1em">
+                  \[ \text{allocation}_i = \text{totalAmount} \times \frac{(1 -
+                  \frac{\text{income}_i}{\sum_{j=0}^{n-1}\text{income}_j})^{\text{fairness}}}{\sum_{k=0}^{n-1}
+                  (1 -
+                  \frac{\text{income}_k}{\sum_{j=0}^{n-1}\text{income}_j})^{\text{fairness}}}
+                  \]
+                </p>
+                <p class="mt-3 text-muted">Where:</p>
+                <ul class="text-muted">
+                  <li>\(n\) is the number of people</li>
+                  <li>\(\text{income}_i\) is person \(i\)'s annual income</li>
+                  <li>
+                    \(\text{fairness}\) is the fairness adjustment parameter (0
+                    to ∞)
+                  </li>
+                  <li>
+                    The numerator adjusts each person's share based on their
+                    relative income
+                  </li>
+                  <li>
+                    The denominator normalizes so all allocations sum to the
+                    total amount
+                  </li>
+                </ul>
+              </div>
+              <p class="mt-3 text-muted">
+                This ensures the sum of all allocations equals the total amount,
+                while giving more to those with lower incomes.
+              </p>
+            </div>
+
+            <div class="mt-4">
+              <a
+                href="https://kyletscheer.medium.com/distributing-an-estate-or-anything-equitably-a-formula-9e3f37b1fa39"
+                target="_blank"
+                class="btn btn-gradient"
+              >
+                <i class="bi bi-book"></i> Read Full Article
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- About Section -->
+    <div class="container mb-5" id="about">
+      <div class="card">
+        <div class="card-body p-5">
+          <h2 class="mb-4">About This Tool</h2>
+          <p class="lead">
+            This calculator helps distribute resources equitably among people
+            based on their income levels and other factors. It's useful for
+            estate planning, family distributions, or any situation where
+            need-based allocation is desired.
+          </p>
+          <p>
+            The mathematical approach ensures fairness by giving more to those
+            who have less, with adjustable parameters to control how strongly
+            income differences affect the distribution.
+          </p>
+          <div class="row g-4 mt-4">
+            <div class="col-md-4">
+              <div class="text-center">
+                <i class="bi bi-shield-check display-4 text-primary"></i>
+                <h5 class="mt-3">Fair & Transparent</h5>
+                <p class="text-muted">
+                  Mathematical formula ensures consistent, fair results
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center">
+                <i class="bi bi-sliders display-4 text-primary"></i>
+                <h5 class="mt-3">Fully Customizable</h5>
+                <p class="text-muted">
+                  Adjust fairness levels and add custom factors
+                </p>
+              </div>
+            </div>
+            <div class="col-md-4">
+              <div class="text-center">
+                <i class="bi bi-graph-up display-4 text-primary"></i>
+                <h5 class="mt-3">Real-Time Preview</h5>
+                <p class="text-muted">
+                  See results update instantly as you type
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-white border-top py-4 mt-5">
+      <div class="container">
+        <div
+          class="d-flex justify-content-between align-items-center flex-wrap"
+        >
+          <div>
+            Made by
+            <a href="https://www.kylescheer.com" target="_blank">Kyle Scheer</a>
+          </div>
+          <a href='https://ko-fi.com/scheerapps' target='_blank' rel="noopener" title="Support me on Ko-fi">
+            <img height='36' style='border:0px;height:36px;'
+            src='https://storage.ko-fi.com/cdn/kofi5.png?v=6' border='0'
+            alt='Buy Me a Coffee at ko-fi.com' />
+        </a>
+          <a
+            href="https://github.com/kyletscheer/equitable-distribution"
+            target="_blank"
+          >
+            <i class="bi bi-github"></i> View Code
+          </a>
+        </div>
+      </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+      // State management
+      let people = [];
+      let pieChart = null;
+      let barChart = null;
+      let fairnessAdjustment = 0;
+
+      // Initialize with sample data
+      function initializeSampleData() {
+        people = [
+          { name: "Person 1", income: 25000 },
+          { name: "Person 2", income: 50000 },
+          { name: "Person 3", income: 100000 },
+        ];
+        renderPeople();
+        calculate();
+      }
+
+      // Logarithmic conversion for slider
+      function logToLinear(value) {
+        return Math.pow(10, value / 100) - 1;
+      }
+
+      function linearToLog(value) {
+        return Math.log10(value + 1) * 100;
+      }
+
+      // Add person
+      document.getElementById("addPersonBtn").addEventListener("click", () => {
+        people.push({
+          name: `Person ${people.length + 1}`,
+          income: 0,
+        });
+        renderPeople();
+        calculate();
+      });
+
+      // Render people inputs
+      function renderPeople() {
+        const container = document.getElementById("peopleContainer");
+        container.innerHTML = people
+          .map(
+            (person, index) => `
+                <div class="person-card" data-index="${index}">
+                    ${
+                      people.length > 1
+                        ? `<button class="remove-person" onclick="removePerson(${index})">
+                        <i class="bi bi-x"></i>
+                    </button>`
+                        : ""
+                    }
+                    <div class="mb-3">
+                        <label class="form-label">Name</label>
+                        <input type="text" class="form-control" value="${
+                          person.name
+                        }" 
+                               onchange="updatePerson(${index}, 'name', this.value)">
+                    </div>
+                    <div>
+                        <label class="form-label">Annual Income</label>
+                        <div class="input-group">
+                            <span class="input-group-text">$</span>
+                            <input type="number" class="form-control" value="${
+                              person.income
+                            }" 
+                                   min="0" oninput="updatePerson(${index}, 'income', parseFloat(this.value) || 0)">
+                        </div>
+                    </div>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      // Update person
+      function updatePerson(index, field, value) {
+        people[index][field] = value;
+        if (field === "name") {
+          renderPeople();
+        }
+        calculate();
+      }
+
+      // Remove person
+      function removePerson(index) {
+        people.splice(index, 1);
+        renderPeople();
+        calculate();
+      }
+
+      // Fairness slider
+      const fairnessSlider = document.getElementById("fairnessSlider");
+      const fairnessValue = document.getElementById("fairnessValue");
+
+      fairnessSlider.addEventListener("input", (e) => {
+        fairnessAdjustment = logToLinear(e.target.value);
+        fairnessValue.textContent = fairnessAdjustment.toFixed(2);
+        document
+          .querySelectorAll(".preset-btn")
+          .forEach((btn) => btn.classList.remove("active"));
+        calculate();
+      });
+
+      // Preset buttons
+      document.querySelectorAll(".preset-btn").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          document
+            .querySelectorAll(".preset-btn")
+            .forEach((b) => b.classList.remove("active"));
+          e.target.classList.add("active");
+          const value = parseFloat(e.target.dataset.value);
+          fairnessAdjustment = value;
+          fairnessSlider.value = linearToLog(value);
+          fairnessValue.textContent = value.toFixed(2);
+          calculate();
+        });
+      });
+
+      // Estate amount change
+      document
+        .getElementById("estateAmount")
+        .addEventListener("input", calculate);
+
+      // Calculate distribution
+      function calculate() {
+        const estateAmount =
+          parseFloat(document.getElementById("estateAmount").value) || 0;
+
+        if (people.length === 0 || estateAmount === 0) {
+          document.getElementById("resultsContainer").innerHTML = `
+                    <div class="text-center text-muted py-5">
+                        <i class="bi bi-calculator display-1 opacity-25"></i>
+                        <p class="mt-3">Add people and incomes to see distribution</p>
+                    </div>
+                `;
+          return;
+        }
+
+        const results = calculateDistribution(
+          people,
+          estateAmount,
+          fairnessAdjustment
+        );
+        renderResults(results, estateAmount);
+        updateCharts(results);
+        updateComparison(people, estateAmount);
+      }
+
+      // Core calculation
+      function calculateDistribution(people, estateAmount, fairness) {
+        const totalIncome = people.reduce((sum, p) => sum + p.income, 0);
+
+        if (totalIncome === 0) {
+          const equalShare = estateAmount / people.length;
+          return people.map((p) => ({
+            name: p.name,
+            income: p.income,
+            allocation: equalShare,
+            percentage: 100 / people.length,
+          }));
+        }
+
+        const incomeShares = people.map((p) => p.income / totalIncome);
+        const adjustedShares = incomeShares.map((share) =>
+          Math.pow(1 - share, fairness)
+        );
+
+        const sumAdjusted = adjustedShares.reduce(
+          (sum, share) => sum + share,
+          0
+        );
+        const normalizedShares = adjustedShares.map(
+          (share) => share / sumAdjusted
+        );
+
+        return people.map((person, i) => ({
+          name: person.name,
+          income: person.income,
+          allocation: estateAmount * normalizedShares[i],
+          percentage: normalizedShares[i] * 100,
+        }));
+      }
+
+      // Render results
+      function renderResults(results, estateAmount) {
+        const container = document.getElementById("resultsContainer");
+        const total = results.reduce((sum, r) => sum + r.allocation, 0);
+
+        container.innerHTML = results
+          .map(
+            (result) => `
+                <div class="allocation-result">
+                    <h5 class="mb-2">${result.name}</h5>
+                    <p class="mb-1">Income: ${result.income.toLocaleString()}</p>
+                    <h3>${result.allocation.toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                      maximumFractionDigits: 2,
+                    })}</h3>
+                    <p class="mb-0">${result.percentage.toFixed(
+                      1
+                    )}% of total</p>
+                </div>
+            `
+          )
+          .join("");
+      }
+
+      // Update charts
+      // Update charts
+      function updateCharts(results) {
+        if (!results || results.length === 0) return;
+
+        // Fixed light/default theme colors
+        const textColor = "#333";
+        const gridColor = "rgba(0, 0, 0, 0.1)";
+
+        const chartColors = [
+          "rgba(102, 126, 234, 0.8)",
+          "rgba(118, 75, 162, 0.8)",
+          "rgba(245, 87, 108, 0.8)",
+          "rgba(74, 172, 254, 0.8)",
+          "rgba(0, 242, 254, 0.8)",
+          "rgba(240, 147, 251, 0.8)",
+        ];
+
+        // Pie Chart
+        const pieCtx = document.getElementById("pieChart").getContext("2d");
+        if (pieChart) pieChart.destroy();
+
+        pieChart = new Chart(pieCtx, {
+          type: "pie",
+          data: {
+            labels: results.map((r) => r.name),
+            datasets: [
+              {
+                data: results.map((r) => r.allocation),
+                backgroundColor: chartColors.slice(0, results.length),
+                borderWidth: 2,
+                borderColor: "#fff", // Fixed to light theme border color
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: "bottom",
+                labels: { color: textColor, padding: 15, font: { size: 12 } },
+              },
+              title: {
+                display: true,
+                text: "Distribution Share",
+                color: textColor,
+                font: { size: 16, weight: "bold" },
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    const value = context.raw;
+                    const percentage = (
+                      (value / results.reduce((s, r) => s + r.allocation, 0)) *
+                      100
+                    ).toFixed(1);
+                    return `${value.toLocaleString()} (${percentage}%)`;
+                  },
+                },
+              },
+            },
+          },
+        });
+
+        // Bar Chart - Income vs Allocation
+        const barCtx = document.getElementById("barChart").getContext("2d");
+        if (barChart) barChart.destroy();
+
+        barChart = new Chart(barCtx, {
+          type: "bar",
+          data: {
+            labels: results.map((r) => r.name),
+            datasets: [
+              {
+                label: "Annual Income",
+                data: results.map((r) => r.income),
+                backgroundColor: "rgba(102, 126, 234, 0.6)",
+                borderColor: "rgba(102, 126, 234, 1)",
+                borderWidth: 2,
+              },
+              {
+                label: "Allocation",
+                data: results.map((r) => r.allocation),
+                backgroundColor: "rgba(245, 87, 108, 0.6)",
+                borderColor: "rgba(245, 87, 108, 1)",
+                borderWidth: 2,
+              },
+            ],
+          },
+          options: {
+            responsive: true,
+            maintainAspectRatio: true,
+            plugins: {
+              legend: {
+                position: "top",
+                labels: { color: textColor, padding: 15, font: { size: 12 } },
+              },
+              title: {
+                display: true,
+                text: "Income vs. Allocation Comparison",
+                color: textColor,
+                font: { size: 16, weight: "bold" },
+              },
+              tooltip: {
+                callbacks: {
+                  label: (context) => {
+                    return `${
+                      context.dataset.label
+                    }: ${context.raw.toLocaleString()}`;
+                  },
+                },
+              },
+            },
+            scales: {
+              y: {
+                beginAtZero: true,
+                ticks: {
+                  color: textColor,
+                  callback: (value) => "$" + Number(value).toLocaleString(),
+                },
+                grid: { color: gridColor },
+              },
+              x: {
+                ticks: { color: textColor },
+                grid: { color: gridColor },
+              },
+            },
+          },
+        });
+      }
+
+      // Scenario comparison
+      function updateComparison(people, estateAmount) {
+        const scenarios = [
+          { name: "Equal Split", value: 0, color: "primary" },
+          { name: "Moderate", value: 1, color: "info" },
+          { name: "Strong", value: 2, color: "warning" },
+          { name: "Very Strong", value: 5, color: "danger" },
+        ];
+
+        const container = document.getElementById("comparisonResults");
+        container.innerHTML = scenarios
+          .map((scenario) => {
+            const results = calculateDistribution(
+              people,
+              estateAmount,
+              scenario.value
+            );
+            return `
+                    <div class="col-md-6 col-lg-3">
+                        <div class="comparison-card">
+                            <h5 class="mb-3">
+                                <span class="badge bg-${scenario.color}">${
+              scenario.name
+            }</span>
+                            </h5>
+                            <p class="text-muted small mb-3">Fairness: ${
+                              scenario.value
+                            }</p>
+                            ${results
+                              .map(
+                                (r) => `
+                                <div class="d-flex justify-content-between align-items-center mb-2">
+                                    <span class="small">${r.name}</span>
+                                    <strong>${r.allocation.toLocaleString(
+                                      "en-US",
+                                      {
+                                        maximumFractionDigits: 0,
+                                      }
+                                    )}</strong>
+                                </div>
+                            `
+                              )
+                              .join("")}
+                        </div>
+                    </div>
+                `;
+          })
+          .join("");
+      }
+
+      // Export functionality
+      document.getElementById("exportBtn").addEventListener("click", (e) => {
+        e.stopPropagation();
+        document.getElementById("exportMenu").classList.toggle("show");
+      });
+
+      document.addEventListener("click", (e) => {
+        if (!e.target.closest("#exportBtn")) {
+          document.getElementById("exportMenu").classList.remove("show");
+        }
+      });
+
+      document.querySelectorAll(".export-item").forEach((item) => {
+        item.addEventListener("click", () => {
+          const format = item.dataset.format;
+          const estateAmount =
+            parseFloat(document.getElementById("estateAmount").value) || 0;
+          const results = calculateDistribution(
+            people,
+            estateAmount,
+            fairnessAdjustment
+          );
+
+          if (format === "csv") {
+            exportCSV(results);
+          } else if (format === "json") {
+            exportJSON(results, estateAmount);
+          } else if (format === "share") {
+            shareLink();
+          }
+
+          document.getElementById("exportMenu").classList.remove("show");
+        });
+      });
+
+      function exportCSV(results) {
+        const csv = [
+          ["Name", "Income", "Allocation", "Percentage"],
+          ...results.map((r) => [
+            r.name,
+            r.income,
+            r.allocation.toFixed(2),
+            r.percentage.toFixed(2) + "%",
+          ]),
+        ]
+          .map((row) => row.join(","))
+          .join("\n");
+
+        downloadFile(csv, "distribution.csv", "text/csv");
+      }
+
+      function exportJSON(results, estateAmount) {
+        const data = {
+          estateAmount,
+          fairnessAdjustment,
+          people: people,
+          results: results,
+          timestamp: new Date().toISOString(),
+        };
+
+        downloadFile(
+          JSON.stringify(data, null, 2),
+          "distribution.json",
+          "application/json"
+        );
+      }
+
+      function downloadFile(content, filename, type) {
+        const blob = new Blob([content], { type });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function shareLink() {
+        const estateAmount = document.getElementById("estateAmount").value;
+        const incomes = people.map((p) => p.income).join(",");
+        const names = people.map((p) => p.name).join("|");
+        const url = `${window.location.origin}${
+          window.location.pathname
+        }?estate=${estateAmount}&incomes=${incomes}&names=${encodeURIComponent(
+          names
+        )}&fairness=${fairnessAdjustment}`;
+
+        navigator.clipboard.writeText(url).then(() => {
+          alert("Share link copied to clipboard!");
+        });
+      }
+
+      // Load from URL parameters
+      function loadFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("estate")) {
+          document.getElementById("estateAmount").value = params.get("estate");
+        }
+        if (params.has("incomes") && params.has("names")) {
+          const incomes = params.get("incomes").split(",").map(Number);
+          const names = params.get("names").split("|");
+          people = incomes.map((income, i) => ({
+            name: names[i] || `Person ${i + 1}`,
+            income,
+          }));
+          renderPeople();
+        }
+        if (params.has("fairness")) {
+          fairnessAdjustment = parseFloat(params.get("fairness"));
+          fairnessSlider.value = linearToLog(fairnessAdjustment);
+          fairnessValue.textContent = fairnessAdjustment.toFixed(2);
+        }
+      }
+
+      // Tab change handler
+      document.querySelectorAll('[data-bs-toggle="tab"]').forEach((tab) => {
+        tab.addEventListener("shown.bs.tab", (e) => {
+          const target = e.target.getAttribute("data-bs-target");
+          if (target === "#comparison-tab") {
+            const estateAmount =
+              parseFloat(document.getElementById("estateAmount").value) || 0;
+            updateComparison(people, estateAmount);
+          }
+        });
+      });
+
+      // Initialize
+      loadFromURL();
+      if (people.length === 0) {
+        initializeSampleData();
+      } else {
+        calculate();
+      }
+    </script>
+  </body>
 </html>
